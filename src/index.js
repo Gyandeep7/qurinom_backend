@@ -13,7 +13,23 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors({ origin: process.env.CLIENT_ORIGIN || true, credentials: true }));
+// Configure CORS explicitly. In production set CLIENT_ORIGIN to the exact
+// origin of your frontend (for example: https://qurinom-frontend-one.vercel.app).
+// If CLIENT_ORIGIN is not set we default to the frontend domain used on Vercel
+// but we don't enable credentials by default unless an explicit origin is provided.
+const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN || 'https://qurinom-frontend-one.vercel.app';
+const ENABLE_CREDENTIALS = Boolean(process.env.CLIENT_ORIGIN);
+
+app.use(cors({
+  origin: CLIENT_ORIGIN,
+  credentials: ENABLE_CREDENTIALS,
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
+// Ensure preflight requests get CORS headers
+app.options('*', cors({ origin: CLIENT_ORIGIN, credentials: ENABLE_CREDENTIALS }));
+
 app.use(express.json());
 
 app.get('/api/health', (_req, res) => {
