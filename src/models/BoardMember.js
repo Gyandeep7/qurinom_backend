@@ -16,3 +16,4 @@ boardMemberSchema.index({ board: 1, user: 1 }, { unique: true });
 export const BoardMember = mongoose.models.BoardMember || mongoose.model('BoardMember', boardMemberSchema);
 
 
+
