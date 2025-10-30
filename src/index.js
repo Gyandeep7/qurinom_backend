@@ -17,7 +17,7 @@ const app = express();
 // origin of your frontend (for example: https://qurinom-frontend-one.vercel.app).
 // If CLIENT_ORIGIN is not set we default to the frontend domain used on Vercel
 // but we don't enable credentials by default unless an explicit origin is provided.
-const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN || 'https://qurinom-frontend-one.vercel.app';
+const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN ? process.env.CLIENT_ORIGIN.split(',') : ['https://qurinom-frontend-one.vercel.app', 'http://localhost:5173/'];
 const ENABLE_CREDENTIALS = Boolean(process.env.CLIENT_ORIGIN);
 
 app.use(cors({
